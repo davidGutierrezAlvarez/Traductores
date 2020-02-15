@@ -45,6 +45,14 @@ namespace Analizador_lexico
 		private String token;
 		private int fila, columna, id;
 		
+		public Token(Token token) {
+			this.estado	= token.estado;
+			this.token	= token.token;
+			this.fila	= token.fila;
+			this.columna= token.columna;
+			this.id		= token.id;
+		}
+		
 		public Token(Estado estadoToken, String token, int fila, int columna) {
 			this.estado = estadoToken;
 			this.token = token;
@@ -132,6 +140,7 @@ namespace Analizador_lexico
 				id = 12;
 				return "else";
 			case Estado.qFin:
+				id = 18;
 				return "fin ejecucion";
 			default:
 				id = -1;

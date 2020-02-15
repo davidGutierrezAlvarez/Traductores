@@ -28,7 +28,7 @@ namespace Analizador_lexico {
 		
 		public LinkedList<Token> escanear() {
 			int fila=1,columna=1;
-			entrada += "$";//fin de la cadena
+			entrada += " $";//fin de la cadena
 			Salida = new LinkedList<Token>();//nueva lista de tokens
 			SalidaError = new LinkedList<Token>();
 			estado = 0;
@@ -81,7 +81,8 @@ namespace Analizador_lexico {
 							agregarToken(Token.Estado.q15, fila, columna);
 						}else if(c.CompareTo('$')==0 && i+1== entrada.Length) {
 							//analiza el fin de cadea
-							//agregarToken(Token.Estado.qFin, fila, columna);
+							aux += c;
+							agregarToken(Token.Estado.qFin, fila, columna);
 						}else if(!esEspacio(c)){
 							//en el caso de que no cumpla la condicion y no sea algun tipo de espacis
 							aux += c;

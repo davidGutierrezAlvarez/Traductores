@@ -44,6 +44,15 @@ namespace Analizador_lexico
 			
 			limpiar();
 			rellenar(lTokens, lTokensError);
+		
+			//analizador sintactico
+			analizadorSintactico sin = new analizadorSintactico(lTokens);
+			if(sin.analizar()) {
+				MessageBox.Show("valido");
+			} else {
+				MessageBox.Show("invalido");
+			}
+			//
 		}
 		
 		void rellenar(LinkedList<Token> lista, LinkedList<Token> listaError) {
