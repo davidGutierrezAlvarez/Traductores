@@ -29,62 +29,138 @@ namespace Analizador_lexico {
 		
 		public bool analizar() {
 			Stack<int> pila = new Stack<int>();
+			int accion=0, regla, reduccion, fila, columna, i =0;
+			String str = "", str2;
+			bool valido = false;
+			
 			//agregamos el cero a la pila
 			pila.Push(0);
-			int accion=0, regla, reduccion;
-			bool positivo =true;
-			
 			var token = listToken.First;//creo un nodo Token
-
+			listToken.AddLast(new Token());
 			do {
 				//por cada token de entrada apilara o desapilara...
 				//tope de la pila y token de entrada
 				//positivo	-> desplazamiento
-				//0			-> casilla vacia
+				//0			-> casilla vacia (error)
 				//-1		-> aceptacion
-				//< -1		-> reduccion
-				if(positivo)
-					accion = _tabla[pila.Peek(), token.Value.getId()+1];
+				//<-1		-> reduccion
 				
+				fila = pila.Peek();
+				columna = token.Value.getId()+1;
 				
-				System.Windows.Forms.MessageBox.Show("["+pila.Peek()+", "+(token.Value.getId()+1)+"] -> accion "+accion);
+				accion = _tabla[fila, columna];
+				
 				if(accion > 0) {
 					//desplazamiento
+					pila.Push(columna);
 					pila.Push(accion);
+					
 					//nos vamos al sig token
 					token = token.Next;
-					//System.Windows.Forms.MessageBox.Show("push. "+accion+"\ntoken "+token.Value.getId()+1);
-					positivo = true;
 				} else if(accion < -1) {
 					//ir a la regla
-					reduccion = accion*(-1)-1;
-					regla = (_reglas[reduccion, 1]);//pops
 					
-					for(int j = 0; j < regla; j++) {
+					regla = accion*(-1)-1;
+					reduccion = _reglas[regla, 1]*2;//pops
+					
+					for(; 0 < reduccion; reduccion--) {
 						pila.Pop();//hacer pop
 					}
 					
-					//ir a...
-					accion = _tabla[pila.Peek(), _reglas[reduccion, 0]+1];
-					
-					System.Windows.Forms.MessageBox.Show("pop\n["+pila.Peek()+ ", " + (_reglas[reduccion, 0]+1)+"] -> "+ accion);
-					
 					//agregar al tope de la pila
-					pila.Push(_reglas[reduccion, 0]);		
+					fila = pila.Peek();
+					columna = _reglas[regla, 0]+1;
+					pila.Push(columna);
+					pila.Push(_tabla[fila, columna]);
 					
-					positivo = false;
-					
-					
-				}else  if(accion == 1) {
-					return true;
+				}else  if(accion == -1) {
+					valido = true;
+					token = token.Next;
 				} else {
 					//error
-					System.Windows.Forms.MessageBox.Show("error. "+accion);
 					return false;
 				}
+				i++;
 			} while(token != listToken.Last);
 			
-			return true;
+			return valido;
+		}
+		
+		
+		public bool analizar_() {
+			Stack<int> pila = new Stack<int>();
+			int accion=0, regla, reduccion, fila, columna, i =0;
+			String str = "", str2;
+			bool valido = false;
+			
+			//agregamos el cero a la pila
+			pila.Push(0);
+			var token = listToken.First;//creo un nodo Token
+			
+			while(i <= listToken.Count) {
+				//por cada token de entrada apilara o desapilara...
+				//tope de la pila y token de entrada
+				//positivo	-> desplazamiento
+				//0			-> casilla vacia (error)
+				//-1		-> aceptacion
+				//< -1		-> reduccion
+				
+				fila = pila.Peek();
+				columna = token.Value.getId()+1;
+				
+				accion = _tabla[fila, columna];
+				str2 = "";
+				foreach(int tope in pila) {
+					str2 += tope+", ";
+				}
+				str += "["+fila+", "+columna+"] -> accion "+accion+"\n";
+				//System.Windows.Forms.MessageBox.Show(str);
+				//System.Windows.Forms.MessageBox.Show(str2);
+				if(accion > 0) {
+					//desplazamiento
+					pila.Push(columna);
+					pila.Push(accion);
+					
+					//nos vamos al sig token
+					token = token.Next;
+				} else if(accion < -1) {
+					//ir a la regla
+					
+					regla = accion*(-1)-1;
+					reduccion = _reglas[regla, 1]*2;//pops
+					
+					
+					System.Windows.Forms.MessageBox.Show("Reduccion: "+reduccion+"Pila: "+ pila.Count);
+					for(; 0 < reduccion; reduccion++) {
+						pila.Pop();//hacer pop
+					}
+					
+					str2 = "";
+					foreach(int tope in pila) {
+						str2 += tope+", ";
+					}
+					str2 += "= "+ i;
+					System.Windows.Forms.MessageBox.Show(str2);
+					
+					//agregar al tope de la pila
+					fila = pila.Peek();
+					columna = _reglas[regla, 0]+1;
+					///str += "fila: "+fila+" columna: "+columna+"] -> accion "+_tabla[fila, columna]+"\n";
+					pila.Push(columna);
+					pila.Push(_tabla[fila, columna]);
+					
+				}else  if(accion == -1) {
+					valido = true;
+				} else {
+				System.Windows.Forms.MessageBox.Show(str2);
+					//error
+					//System.Windows.Forms.MessageBox.Show("error. "+accion);
+					return false;
+				}
+				i++;
+			}
+	
+			return valido;
 		}
 		
 		void matriz() {
@@ -94,8 +170,8 @@ namespace Analizador_lexico {
 			String[] corte = new string[2];
 			while((aux = reglas.ReadLine()) != null) {
 				corte = aux.Split('\t');
-				_reglas[i,0] = Int32.Parse(corte[0]);
-				_reglas[i++,1] = Int32.Parse(corte[1]);
+				_reglas[i,0] = int.Parse(corte[0]);
+				_reglas[i++,1] = int.Parse(corte[1]);
 			}
 			
 			i = 0;//reseteo el conteo
@@ -104,7 +180,7 @@ namespace Analizador_lexico {
 				
 				corte = aux.Split('\t');
 				for(int j = 0; j < 40; j++) {
-					_tabla[i,j] = Int32.Parse(corte[j]);
+					_tabla[i,j] = int.Parse(corte[j]);
 				}
 				i++;
 			}
@@ -115,6 +191,25 @@ namespace Analizador_lexico {
 			return ""+_tabla[78,39];
 		}
 		
+		public String getValue(int e) {
+			e--;
+			if(e == 0) {
+				return "var,";
+			}else if(e == 1) {
+				return "main,";
+			}else if(e == 4) {
+				return "(,";
+			}else if(e == 5) {
+				return "),";
+			}else if(e == 6) {
+				return "{,";
+			}else if(e == 7) {
+				return "},";
+			}else if(e == 18) {
+				return "$,";
+			}
+			return e+",";
+		}
 		
 	}
 }

@@ -53,6 +53,23 @@ namespace Analizador_lexico
 			this.id		= token.id;
 		}
 		
+		public String getValue(Estado e) {
+			if(e == Estado.q0) {
+				return "var";
+			}else if(e == Estado.q1) {
+				return "main";
+			}else if(e == Estado.q4) {
+				return "(";
+			}else if(e == Estado.q5) {
+				return ")";
+			}else if(e == Estado.q6) {
+				return "{";
+			}else if(e == Estado.q7) {
+				return "}";
+			}
+			return "";
+		}
+		
 		public Token(Estado estadoToken, String token, int fila, int columna) {
 			this.estado = estadoToken;
 			this.token = token;

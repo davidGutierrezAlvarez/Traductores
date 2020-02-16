@@ -47,12 +47,17 @@ namespace Analizador_lexico
 		
 			//analizador sintactico
 			analizadorSintactico sin = new analizadorSintactico(lTokens);
-			if(sin.analizar()) {
-				MessageBox.Show("valido");
+			if(lTokensError.Count == 0) {
+				if(sin.analizar()) {
+					MessageBox.Show("valido");
+				} else {
+					MessageBox.Show("Sintaxis invalido");
+				}
 			} else {
-				MessageBox.Show("invalido");
+				MessageBox.Show("Lexico invaldio");
+				
 			}
-			//
+			
 		}
 		
 		void rellenar(LinkedList<Token> lista, LinkedList<Token> listaError) {
