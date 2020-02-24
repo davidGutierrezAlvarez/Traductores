@@ -44,7 +44,6 @@ namespace Analizador_lexico
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.textBox = new System.Windows.Forms.RichTextBox();
-			this.lblError = new System.Windows.Forms.Label();
 			this.columnaError = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.filaError = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.lexemaError = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,7 +54,7 @@ namespace Analizador_lexico
 			this.fila_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.columna_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.lblResultLexema = new System.Windows.Forms.Label();
+			this.openFile = new System.Windows.Forms.OpenFileDialog();
 			this.menuStrip1.SuspendLayout();
 			this.tabControl.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -83,6 +82,7 @@ namespace Analizador_lexico
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
 			this.toolStripMenuItem3.Size = new System.Drawing.Size(121, 24);
 			this.toolStripMenuItem3.Text = "Abrir";
+			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 
 			// ejecutarToolStripMenuItem
 			// 
@@ -108,7 +108,7 @@ namespace Analizador_lexico
 			this.tabControl.Location = new System.Drawing.Point(0, 28);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(616, 545);
+			this.tabControl.Size = new System.Drawing.Size(616, 578);
 			this.tabControl.TabIndex = 6;
 			// 
 			// tabPage1
@@ -117,7 +117,7 @@ namespace Analizador_lexico
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(608, 516);
+			this.tabPage1.Size = new System.Drawing.Size(608, 549);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Codigo";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -127,19 +127,11 @@ namespace Analizador_lexico
 			this.textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textBox.Location = new System.Drawing.Point(6, 6);
 			this.textBox.Name = "textBox";
-			this.textBox.Size = new System.Drawing.Size(596, 485);
+			this.textBox.Size = new System.Drawing.Size(596, 537);
 			this.textBox.TabIndex = 7;
 			this.textBox.Text = "";
-			// 
-			// lblError
-			// 
-			this.lblError.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblError.Location = new System.Drawing.Point(4, 586);
-			this.lblError.Name = "lblError";
-			this.lblError.Size = new System.Drawing.Size(608, 23);
-			this.lblError.TabIndex = 3;
-			this.lblError.Text = "ERRORES";
-			this.lblError.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.textBox.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
+			this.textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxKeyDown);
 			// 
 			// columnaError
 			// 
@@ -186,10 +178,10 @@ namespace Analizador_lexico
 			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
 			this.dataTable.DefaultCellStyle = dataGridViewCellStyle1;
-			this.dataTable.Location = new System.Drawing.Point(634, 27);
+			this.dataTable.Location = new System.Drawing.Point(634, 53);
 			this.dataTable.Name = "dataTable";
 			this.dataTable.RowTemplate.Height = 24;
-			this.dataTable.Size = new System.Drawing.Size(491, 705);
+			this.dataTable.Size = new System.Drawing.Size(491, 679);
 			this.dataTable.TabIndex = 0;
 			// 
 			// token_
@@ -217,15 +209,9 @@ namespace Analizador_lexico
 			this.id.HeaderText = "Id";
 			this.id.Name = "id";
 			// 
-			// lblResultLexema
+			// openFile
 			// 
-			this.lblResultLexema.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblResultLexema.Location = new System.Drawing.Point(634, 1);
-			this.lblResultLexema.Name = "lblResultLexema";
-			this.lblResultLexema.Size = new System.Drawing.Size(491, 23);
-			this.lblResultLexema.TabIndex = 2;
-			this.lblResultLexema.Text = "TOKENS";
-			this.lblResultLexema.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.openFile.FileName = "openFile";
 			// 
 			// MainForm
 			// 
@@ -233,14 +219,13 @@ namespace Analizador_lexico
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1144, 744);
 			this.Controls.Add(this.tabControl);
-			this.Controls.Add(this.lblError);
-			this.Controls.Add(this.lblResultLexema);
 			this.Controls.Add(this.dataTableError);
 			this.Controls.Add(this.dataTable);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
 			this.Text = "Analizador lexico";
+			this.Resize += new System.EventHandler(this.MainFormResize);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.tabControl.ResumeLayout(false);
@@ -250,6 +235,7 @@ namespace Analizador_lexico
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.OpenFileDialog openFile;
 		private System.Windows.Forms.DataGridViewTextBoxColumn id;
 		private System.Windows.Forms.DataGridViewTextBoxColumn columna_;
 		private System.Windows.Forms.DataGridViewTextBoxColumn fila_;
@@ -266,15 +252,10 @@ namespace Analizador_lexico
 		private System.Windows.Forms.DataGridViewTextBoxColumn columnaError;
 		private System.Windows.Forms.DataGridViewTextBoxColumn filaError;
 		private System.Windows.Forms.DataGridViewTextBoxColumn lexemaError;
-		private System.Windows.Forms.Label lblError;
-		private System.Windows.Forms.Label lblResultLexema;
 		private System.Windows.Forms.DataGridView dataTableError;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Numero;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Columna;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Fila;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Lexema;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Token;
 		private System.Windows.Forms.DataGridView dataTable;
 		
+		
+
 	}
 }

@@ -30,7 +30,6 @@ namespace Analizador_lexico {
 		public bool analizar() {
 			Stack<int> pila = new Stack<int>();
 			int accion=0, regla, reduccion, fila, columna, i =0;
-			String str = "", str2;
 			bool valido = false;
 			
 			//agregamos el cero a la pila

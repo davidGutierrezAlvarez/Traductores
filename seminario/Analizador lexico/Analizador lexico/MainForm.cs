@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Analizador_lexico
 {
@@ -27,7 +28,7 @@ namespace Analizador_lexico
 			
 			dataTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dataTableError.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			
+			resize();
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
@@ -61,8 +62,12 @@ namespace Analizador_lexico
 		}
 		
 		void rellenar(LinkedList<Token> lista, LinkedList<Token> listaError) {
+			int count = 0;
 			foreach(Token item in lista) {
 				dataTable.Rows.Add(item.getStado(), item.getToken(), item.getFila(), item.gefColumna(), item.getId());
+				count += item.getFila();
+				textBox.SelectionColor = item.getFila()%2 == 0 ? Color.Red : Color.Blue;
+				//textBox.SelectedText = textBox.Text + Environment.NewLine;
 				//System.Windows.Forms.MessageBox.Show(item.getStado()+"---"+item.getToken());
 			}
 			foreach(Token item in listaError) {
@@ -78,5 +83,58 @@ namespace Analizador_lexico
 		}
 		
 		
+		
+		void TextBoxTextChanged(object sender, EventArgs e) {
+			/*String entrada = textBox.Text;
+			AnalizadorLexico lex = new AnalizadorLexico(entrada);
+			LinkedList<Token> lTokens = lex.escanear();
+				
+			
+			LinkedList<Token> lTokensError = lex.listError();
+			
+			limpiar();
+			rellenar(lTokens, lTokensError);*/
+		}
+		 
+		void resize() {
+			int border = 18, margen = 60;
+			int size = this.Width - dataTable.Width- margen;
+			textBox.Width = size;
+			textBox.Height = this.Height - 210;
+			tabControl.Width = size + border;
+			tabControl.Height= this.Height - 177;
+			dataTableError.Width = size + border-7;
+			dataTable.Height = this.Height - 91;
+			dataTableError.Location = new Point(dataTableError.Location.X, textBox.Height + 64);
+			dataTable.Location = new Point(textBox.Width + margen/2, dataTable.Location.Y);
+		}
+		
+		
+		
+		void TextBoxKeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.F5) 
+				MessageBox.Show("EJECUTAR.");
+		}
+	
+		
+		
+		
+		
+		void MainFormResize(object sender, EventArgs e) {
+			resize();
+		}
+		
+		void ToolStripMenuItem3Click(object sender, EventArgs e) {
+			
+			if(openFile.ShowDialog() == DialogResult.OK) {
+				StreamReader reglas = new StreamReader(openFile.FileName);
+				String str = "", aux;
+				while((aux = reglas.ReadLine()) != null) {
+					str += aux + "\n";
+				}
+				textBox.Text = str;
+			}
+		}
 	}
 }
