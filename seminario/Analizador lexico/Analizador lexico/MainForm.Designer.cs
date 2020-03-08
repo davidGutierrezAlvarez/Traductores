@@ -74,13 +74,14 @@ namespace Analizador_lexico
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(121, 24);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 24);
 			this.toolStripMenuItem4.Text = "Nuevo";
+			this.toolStripMenuItem4.Click += new System.EventHandler(this.ToolStripMenuItem4Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(121, 24);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 24);
 			this.toolStripMenuItem3.Text = "Abrir";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 

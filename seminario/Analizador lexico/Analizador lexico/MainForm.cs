@@ -29,6 +29,9 @@ namespace Analizador_lexico
 			dataTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dataTableError.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			resize();
+			textBox.Multiline = true;
+			textBox.AcceptsTab = true;
+			//textBox.SelectionTabs  = new int[] {20};
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
@@ -62,13 +65,11 @@ namespace Analizador_lexico
 		}
 		
 		void rellenar(LinkedList<Token> lista, LinkedList<Token> listaError) {
-			int count = 0;
+			//int count = 0;
 			foreach(Token item in lista) {
 				dataTable.Rows.Add(item.getStado(), item.getToken(), item.getFila(), item.gefColumna(), item.getId());
-				count += item.getFila();
-				textBox.SelectionColor = item.getFila()%2 == 0 ? Color.Red : Color.Blue;
-				//textBox.SelectedText = textBox.Text + Environment.NewLine;
-				//System.Windows.Forms.MessageBox.Show(item.getStado()+"---"+item.getToken());
+				
+				
 			}
 			foreach(Token item in listaError) {
 				dataTableError.Rows.Add(item.getToken(), item.getFila(), item.gefColumna());
@@ -85,15 +86,12 @@ namespace Analizador_lexico
 		
 		
 		void TextBoxTextChanged(object sender, EventArgs e) {
-			/*String entrada = textBox.Text;
-			AnalizadorLexico lex = new AnalizadorLexico(entrada);
-			LinkedList<Token> lTokens = lex.escanear();
-				
-			
-			LinkedList<Token> lTokensError = lex.listError();
-			
-			limpiar();
-			rellenar(lTokens, lTokensError);*/
+			/*
+			textBox.SelectionStart = 10;
+			textBox.SelectionLength = textBox.SelectionStart + 5;
+			textBox.SelectionColor = Color.Red;
+			//textBox.AppendText("int");
+			textBox.SelectionColor= textBox.ForeColor;*/
 		}
 		 
 		void resize() {
@@ -111,14 +109,13 @@ namespace Analizador_lexico
 		
 		
 		
-		void TextBoxKeyDown(object sender, KeyEventArgs e)
-		{
-			if(e.KeyCode == Keys.F5) 
+		void TextBoxKeyDown(object sender, KeyEventArgs e) {
+			
+			if(e.KeyCode == Keys.F5) {
 				MessageBox.Show("EJECUTAR.");
+			}
 		}
 	
-		
-		
 		
 		
 		void MainFormResize(object sender, EventArgs e) {
@@ -126,14 +123,16 @@ namespace Analizador_lexico
 		}
 		
 		void ToolStripMenuItem3Click(object sender, EventArgs e) {
-			
 			if(openFile.ShowDialog() == DialogResult.OK) {
-				StreamReader reglas = new StreamReader(openFile.FileName);
-				String str = "", aux;
-				while((aux = reglas.ReadLine()) != null) {
-					str += aux + "\n";
-				}
-				textBox.Text = str;
+				textBox.Text = File.ReadAllText(openFile.FileName);
+			}
+		}
+		
+		void ToolStripMenuItem4Click(object sender, EventArgs e) {
+			if(textBox.Text != "") {
+				//no esta vacio
+				MessageBox.Show("se borro");
+				textBox.Text = "";
 			}
 		}
 	}
